@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+@SuppressWarnings("deprecation")
 public class LancamentoDto {
 	
 	private Optional<Long> id = Optional.empty();
