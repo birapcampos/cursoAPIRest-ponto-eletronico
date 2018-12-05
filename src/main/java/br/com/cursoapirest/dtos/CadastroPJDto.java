@@ -1,10 +1,16 @@
 package br.com.cursoapirest.dtos;
 
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.br.CNPJ;
 import org.hibernate.validator.constraints.br.CPF;
+
+import br.com.cursoapirest.enums.PerfilEnum;
 
 public class CadastroPJDto {
 	
@@ -15,6 +21,7 @@ public class CadastroPJDto {
 	private String cpf;
 	private String razaoSocial;
 	private String cnpj;
+	private PerfilEnum perfilenum;
 
 	public CadastroPJDto() {
 	}
@@ -86,6 +93,17 @@ public class CadastroPJDto {
 
 	public void setCnpj(String cnpj) {
 		this.cnpj = cnpj;
+	}
+	
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "perfil", nullable = false)
+	public PerfilEnum getPerfilenum() {
+		return perfilenum;
+	}
+
+	public void setPerfilenum(PerfilEnum perfilenum) {
+		this.perfilenum = perfilenum;
 	}
 
 	@Override

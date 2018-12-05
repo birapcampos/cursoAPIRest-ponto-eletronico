@@ -90,7 +90,7 @@ public class FuncionarioController {
 			return ResponseEntity.badRequest().body(response);
 		}
 		
-		response.setCollecao(this.converterFuncionariosDto(funcionarios));
+		response.setdatalist(this.converterFuncionariosDto(funcionarios));
 		return ResponseEntity.ok(response);
 
 	}
