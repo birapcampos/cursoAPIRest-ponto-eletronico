@@ -1,5 +1,6 @@
 package br.com.cursoapirest.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import br.com.cursoapirest.entities.Funcionario;
@@ -37,5 +38,7 @@ public interface FuncionarioService {
 	 * @return Optional<Funcionario>
 	 */
 	Optional<Funcionario> buscarPorId(Long id);
+	
+	List<Funcionario> buscarTodos();
 
 }

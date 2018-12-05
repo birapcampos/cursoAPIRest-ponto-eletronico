@@ -1,5 +1,6 @@
 package br.com.cursoapirest.services.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -38,5 +39,10 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 		log.info("Buscando funcionário pelo IDl {}", id);
 		return this.funcionarioRepository.findById(id);
 	}
-
+	
+	public List<Funcionario> buscarTodos(){
+		log.info("Buscando todos os funcionários.");
+		return this.funcionarioRepository.findAll();
+	}
+	
 }

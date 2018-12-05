@@ -2,6 +2,8 @@ package br.com.cursoapirest.controllers;
 
 import java.math.BigDecimal;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -73,6 +76,43 @@ public class FuncionarioController {
 		return ResponseEntity.ok(response);
 	}
 
+	
+	@GetMapping(value = "/todos")
+	public ResponseEntity<Response<FuncionarioDto>> buscaTodos(){
+				
+		Response<FuncionarioDto> response = new Response<FuncionarioDto>();
+
+		List<Funcionario> funcionarios = this.funcionarioService.buscarTodos();
+		
+		if (null==funcionarios || funcionarios.size()<0) {
+			log.info("Nenhum funcionario encontrado");
+			response.getErrors().add("Nenhum funcionario encontrado");
+			return ResponseEntity.badRequest().body(response);
+		}
+		
+		response.setCollecao(this.converterFuncionariosDto(funcionarios));
+		return ResponseEntity.ok(response);
+
+	}
+
+	
+	@GetMapping(value = "/cpf/{cpf}")
+	public ResponseEntity<Response<FuncionarioDto>> buscaPorCPF(@PathVariable("cpf") String cpf){
+				
+		Response<FuncionarioDto> response = new Response<FuncionarioDto>();
+
+		Optional<Funcionario> funcionario = this.funcionarioService.buscarPorCpf(cpf);
+		
+		if (!funcionario.isPresent()) {
+			log.info("Funcionario não encontrado para o CPF: {}", cpf);
+			response.getErrors().add("Empresa não encontrada para o CPF " + cpf);
+			return ResponseEntity.badRequest().body(response);
+		}
+		
+		response.setData(this.converterFuncionarioDto(funcionario.get()));
+		return ResponseEntity.ok(response);
+
+	}
 	/**
 	 * Atualiza os dados do funcionário com base nos dados encontrados no DTO.
 	 * 
@@ -128,5 +168,28 @@ public class FuncionarioController {
 
 		return funcionarioDto;
 	}
+	
+	private List<FuncionarioDto> converterFuncionariosDto(List<Funcionario> funcionarios){
+		List<FuncionarioDto> listfuncionarioDto = new ArrayList<FuncionarioDto>();
+		
+		for (Funcionario funcionario : funcionarios) {
+			
+			FuncionarioDto funcionarioDto = new FuncionarioDto();
+			funcionarioDto.setId(funcionario.getId());
+			funcionarioDto.setEmail(funcionario.getEmail());
+			funcionarioDto.setNome(funcionario.getNome());
+			funcionario.getQtdHorasAlmocoOpt().ifPresent(
+					qtdHorasAlmoco -> funcionarioDto.setQtdHorasAlmoco(Optional.of(Float.toString(qtdHorasAlmoco))));
+			funcionario.getQtdHorasTrabalhoDiaOpt().ifPresent(
+					qtdHorasTrabDia -> funcionarioDto.setQtdHorasTrabalhoDia(Optional.of(Float.toString(qtdHorasTrabDia))));
+			funcionario.getValorHoraOpt()
+					.ifPresent(valorHora -> funcionarioDto.setValorHora(Optional.of(valorHora.toString())));
+			
+			listfuncionarioDto.add(funcionarioDto);
+		}
+		
+		return listfuncionarioDto;
+	}
+	
 
 }

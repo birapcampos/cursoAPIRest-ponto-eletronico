@@ -6,6 +6,7 @@ import java.util.List;
 public class Response<T> {
 
 	private T data;
+	private List<T> collecao;
 	private List<String> errors;
 
 	public Response() {
@@ -30,4 +31,13 @@ public class Response<T> {
 		this.errors = errors;
 	}
 
+	public List<T> getCollecao() {
+		return collecao;
+	}
+
+	public void setCollecao(List<T> collecao) {
+		this.collecao = collecao;
+	}
+
+	
 }
